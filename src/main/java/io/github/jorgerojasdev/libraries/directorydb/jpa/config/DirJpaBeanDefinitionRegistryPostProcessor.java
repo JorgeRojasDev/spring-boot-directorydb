@@ -2,6 +2,8 @@ package io.github.jorgerojasdev.libraries.directorydb.jpa.config;
 
 import io.github.jorgerojasdev.libraries.directorydb.jpa.model.annotation.EnableDirJpaRepositories;
 import io.github.jorgerojasdev.libraries.directorydb.jpa.processor.DirJpaProcessor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.NoSuchBeanDefinitionException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
@@ -11,6 +13,8 @@ import org.springframework.beans.factory.support.BeanDefinitionRegistryPostProce
 public class DirJpaBeanDefinitionRegistryPostProcessor implements BeanDefinitionRegistryPostProcessor {
 
     private BeanDefinitionRegistry beanDefinitionRegistry;
+
+    private static Logger logger = LoggerFactory.getLogger(DirJpaBeanDefinitionRegistryPostProcessor.class);
 
     @Override
     public void postProcessBeanDefinitionRegistry(BeanDefinitionRegistry beanDefinitionRegistry) throws BeansException {
@@ -22,10 +26,10 @@ public class DirJpaBeanDefinitionRegistryPostProcessor implements BeanDefinition
         configurableListableBeanFactory.getBeansWithAnnotation(EnableDirJpaRepositories.class).forEach((name, beanObject) -> {
             try {
                 for (String basePackage : configurableListableBeanFactory.findAnnotationOnBean(name, EnableDirJpaRepositories.class).basePackages()) {
-                    DirJpaProcessor.process(beanDefinitionRegistry, basePackage);
+                    DirJpaProcessor.processor().process(beanDefinitionRegistry, basePackage);
                 }
             } catch (NoSuchBeanDefinitionException e) {
-                e.printStackTrace();
+                logger.error("Error processing bean", e);
             }
         });
     }
