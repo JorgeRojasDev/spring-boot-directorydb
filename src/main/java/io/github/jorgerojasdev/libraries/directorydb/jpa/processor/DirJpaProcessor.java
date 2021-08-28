@@ -31,7 +31,7 @@ public class DirJpaProcessor implements ProxiedBeanProcessor {
 
         classes.forEach(clazz -> {
             Type[] types = clazz.getGenericInterfaces();
-            if (clazz.isInterface() && types.length == 0) {
+            if (clazz.isInterface() && types.length == 1) {
                 Type[] classGenericTypes = getClassGenericTypes(types[0]);
                 if (classGenericTypes.length > 0) {
                     try {

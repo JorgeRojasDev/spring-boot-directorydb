@@ -4,16 +4,22 @@ import io.github.jorgerojasdev.libraries.directorydb.jpa.service.abstraction.Dir
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class DirJpaRepositoryImp<T, K> implements DirJpaRepository<T, K> {
+import java.time.LocalDateTime;
 
-    private Logger log;
+public class DirJpaRepositoryImp<T, ID> implements DirJpaRepository<T, ID> {
+
+    private Logger logger;
     private Class<T> entityClazz;
-    private Class<K> idClazz;
+    private Class<ID> idClazz;
 
-    public DirJpaRepositoryImp(Class<?> clazz, Class<T> entityClazz, Class<K> idClazz) {
-        this.log = LoggerFactory.getLogger(clazz);
+    public DirJpaRepositoryImp(Class<?> clazz, Class<T> entityClazz, Class<ID> idClazz) {
+        this.logger = LoggerFactory.getLogger(clazz);
         this.entityClazz = entityClazz;
         this.idClazz = idClazz;
     }
 
+    @Override
+    public void printTime() {
+        logger.info(LocalDateTime.now().toString());
+    }
 }
